@@ -1,0 +1,48 @@
+<div class="space-y-6">
+  <div>
+    <h1 class="page-title">Notification Preferences</h1>
+    <p class="text-sm text-gray-500 mt-1">Choose how you want to receive notifications</p>
+  </div>
+
+  <div *ngIf="loading" class="card p-8 text-center">
+    <div class="w-8 h-8 border-4 border-primary-200 border-t-primary-600 rounded-full animate-spin mx-auto mb-3"></div>
+  </div>
+
+  <div *ngIf="successMessage" class="card p-4 bg-green-50 border-green-200 text-green-700 text-sm">✅ {{ successMessage }}</div>
+  <div *ngIf="errorMessage && !loading" class="card p-4 bg-red-50 border-red-200 text-red-700 text-sm">⚠️ {{ errorMessage }}</div>
+
+  <div *ngIf="!loading" class="card p-6 max-w-md">
+    <form [formGroup]="prefForm" (ngSubmit)="save()" class="space-y-5">
+      <div class="space-y-4">
+        <label class="flex items-center justify-between p-4 bg-gray-50 rounded-lg cursor-pointer hover:bg-gray-100 transition-colors">
+          <div>
+            <p class="font-medium text-gray-800 text-sm">In-App Notifications</p>
+            <p class="text-xs text-gray-500 mt-0.5">Receive notifications inside the application</p>
+          </div>
+          <div class="relative">
+            <input type="checkbox" formControlName="inAppEnabled" class="sr-only peer" />
+            <div class="w-11 h-6 bg-gray-300 peer-checked:bg-primary-600 rounded-full transition-colors peer-focus:ring-2 peer-focus:ring-primary-300"></div>
+            <div class="absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform peer-checked:translate-x-5"></div>
+          </div>
+        </label>
+
+        <label class="flex items-center justify-between p-4 bg-gray-50 rounded-lg cursor-pointer hover:bg-gray-100 transition-colors">
+          <div>
+            <p class="font-medium text-gray-800 text-sm">Email Notifications</p>
+            <p class="text-xs text-gray-500 mt-0.5">Receive notifications via email</p>
+          </div>
+          <div class="relative">
+            <input type="checkbox" formControlName="emailEnabled" class="sr-only peer" />
+            <div class="w-11 h-6 bg-gray-300 peer-checked:bg-primary-600 rounded-full transition-colors peer-focus:ring-2 peer-focus:ring-primary-300"></div>
+            <div class="absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform peer-checked:translate-x-5"></div>
+          </div>
+        </label>
+      </div>
+
+      <button type="submit" class="btn-primary w-full" [disabled]="saving">
+        <span *ngIf="!saving">Save Preferences</span>
+        <span *ngIf="saving">Saving...</span>
+      </button>
+    </form>
+  </div>
+</div>

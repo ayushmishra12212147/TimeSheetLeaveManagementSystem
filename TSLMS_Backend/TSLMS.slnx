@@ -1,0 +1,11 @@
+<Solution>
+  <Project Path="ApiGateway/ApiGateway.csproj" Id="4292a8bc-e457-4ea4-8b10-3acee8218a03" />
+  <Project Path="AuditService/AuditService.csproj" Id="b7f57a41-3b1c-456f-a907-47fe27cec5cb" />
+  <Project Path="AuthService/AuthService.csproj" Id="d6d1b715-e2c1-4049-89b2-3cc927c2b2c3" />
+  <Project Path="EmployeeService/EmployeeService.csproj" Id="2801d1a5-9244-49fe-85a9-584488dd2697" />
+  <Project Path="HolidayService/HolidayService.csproj" Id="bb53a83b-665a-4378-8964-79ed944a020c" />
+  <Project Path="LeaveService/LeaveService.csproj" Id="e8b3bd03-cca6-4194-bf9e-d3f50e5d85ed" />
+  <Project Path="NotificationService/NotificationService.csproj" Id="2373abcc-54d3-4ae9-a629-d7265b38f0e8" />
+  <Project Path="ReportService/ReportService.csproj" Id="8dfd1815-de8a-41f0-a404-2aed5e3d5760" />
+  <Project Path="TimesheetService/TimesheetService.csproj" Id="8778431a-ae92-4d9b-8ec7-4ad92c610b57" />
+</Solution>

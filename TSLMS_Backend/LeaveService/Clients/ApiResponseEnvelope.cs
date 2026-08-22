@@ -1,0 +1,9 @@
+namespace LeaveService.Clients
+{
+    public class ApiResponseEnvelope<T>
+    {
+        public bool Success { get; set; }
+        public string Message { get; set; } = string.Empty;
+        public T? Data { get; set; }
+    }
+}

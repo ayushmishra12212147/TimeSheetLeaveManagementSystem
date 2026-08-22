@@ -1,0 +1,39 @@
+<div class="space-y-6">
+  <div>
+    <h1 class="page-title">Assign Manager</h1>
+    <p class="text-sm text-gray-500 mt-1">Assign or change a manager for an employee</p>
+  </div>
+
+  <div *ngIf="loading" class="card p-8 text-center">
+    <div class="w-8 h-8 border-4 border-primary-200 border-t-primary-600 rounded-full animate-spin mx-auto mb-3"></div>
+  </div>
+  <div *ngIf="errorMessage && !loading" class="card p-4 bg-red-50 border-red-200 text-red-700 text-sm">⚠️ {{ errorMessage }}</div>
+  <div *ngIf="successMessage" class="card p-4 bg-green-50 border-green-200 text-green-700 text-sm">✅ {{ successMessage }}</div>
+
+  <div *ngIf="!loading" class="card p-6 max-w-md">
+    <form [formGroup]="assignForm" (ngSubmit)="submit()" class="space-y-4">
+      <div>
+        <label class="label">Employee <span class="text-red-500">*</span></label>
+        <select formControlName="userId" class="input-field">
+          <option value="">-- Select Employee --</option>
+          <option *ngFor="let u of getEmployees()" [value]="u.id">
+            {{ u.fullName }} ({{ u.employeeId }})
+          </option>
+        </select>
+      </div>
+      <div>
+        <label class="label">Manager <span class="text-red-500">*</span></label>
+        <select formControlName="managerId" class="input-field">
+          <option value="">-- Select Manager --</option>
+          <option *ngFor="let m of managers" [value]="m.id">
+            {{ m.fullName }} ({{ m.role }})
+          </option>
+        </select>
+      </div>
+      <button type="submit" class="btn-primary w-full" [disabled]="formLoading">
+        <span *ngIf="!formLoading">Assign Manager</span>
+        <span *ngIf="formLoading">Saving...</span>
+      </button>
+    </form>
+  </div>
+</div>

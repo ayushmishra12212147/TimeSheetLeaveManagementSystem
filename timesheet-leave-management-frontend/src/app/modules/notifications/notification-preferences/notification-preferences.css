@@ -1,0 +1,4 @@
+/* Toggle switch peer styles handled by Tailwind */
+input[type="checkbox"].sr-only:checked ~ div:first-of-type {
+  background-color: var(--color-primary-600, #4f46e5);
+}

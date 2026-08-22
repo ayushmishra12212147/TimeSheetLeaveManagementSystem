@@ -1,0 +1,46 @@
+<div class="min-h-screen flex items-center justify-center bg-gray-50 p-8">
+  <div class="w-full max-w-md">
+    <div class="card p-8">
+
+      <div class="text-center mb-8">
+        <div class="w-14 h-14 bg-yellow-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+          <span class="text-2xl">🔒</span>
+        </div>
+        <h2 class="text-2xl font-bold text-gray-900">Change Password</h2>
+        <p class="text-gray-500 mt-1 text-sm">You must change your password before continuing</p>
+      </div>
+
+      <div *ngIf="errorMessage"
+           class="mb-6 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm flex items-center gap-2">
+        <span>⚠️</span>
+        <span>{{ errorMessage }}</span>
+      </div>
+
+      <form (ngSubmit)="submit()" class="space-y-5">
+        <div>
+          <label for="currentPassword" class="label">Current Password</label>
+          <input id="currentPassword" [(ngModel)]="currentPassword" name="currentPassword"
+                 type="password" placeholder="Temporary password" class="input-field" [disabled]="loading" />
+        </div>
+        <div>
+          <label for="newPassword" class="label">New Password</label>
+          <input id="newPassword" [(ngModel)]="newPassword" name="newPassword"
+                 type="password" placeholder="Min 6 characters" class="input-field" [disabled]="loading" />
+        </div>
+        <div>
+          <label for="confirmPassword" class="label">Confirm New Password</label>
+          <input id="confirmPassword" [(ngModel)]="confirmPassword" name="confirmPassword"
+                 type="password" placeholder="Re-enter new password" class="input-field" [disabled]="loading" />
+        </div>
+        <button type="submit" class="btn-primary w-full py-3" [disabled]="loading">
+          <span *ngIf="!loading">Update Password</span>
+          <span *ngIf="loading" class="flex items-center justify-center gap-2">
+            <span class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+            Updating...
+          </span>
+        </button>
+      </form>
+
+    </div>
+  </div>
+</div>

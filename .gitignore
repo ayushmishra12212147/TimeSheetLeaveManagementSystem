@@ -1,0 +1,43 @@
+# .NET build / IDE
+[Bb]in/
+[Oo]bj/
+build-temp/
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa]rtifacts/
+*.nupkg
+*.snupkg
+TestResults/
+*.cache
+
+# Secrets and local config
+.env
+.env.*
+!.env.example
+appsettings.Development.json
+appsettings.Local.json
+**/secrets.json
+
+# Node / Angular
+node_modules/
+.angular/
+dist/
+.tmp/
+npm-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# OS
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Root backup archives (duplicate of folders)
+*.zip

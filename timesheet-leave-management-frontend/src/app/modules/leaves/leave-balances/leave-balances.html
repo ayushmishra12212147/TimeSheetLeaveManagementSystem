@@ -1,0 +1,62 @@
+<div class="space-y-6">
+
+  <div>
+    <h1 class="page-title">Leave Balances</h1>
+    <p class="text-sm text-gray-500 mt-1">Your current leave allocation and usage</p>
+  </div>
+
+  <!-- Loading -->
+  <div *ngIf="loading" class="card p-8 text-center">
+    <div class="w-8 h-8 border-4 border-primary-200 border-t-primary-600 rounded-full animate-spin mx-auto mb-3"></div>
+    <p class="text-gray-500 text-sm">Loading balances...</p>
+  </div>
+
+  <!-- Error -->
+  <div *ngIf="errorMessage && !loading" class="card p-4 bg-red-50 border-red-200 text-red-700 text-sm">
+    ⚠️ {{ errorMessage }}
+  </div>
+
+  <!-- Empty -->
+  <div *ngIf="!loading && !errorMessage && balances.length === 0" class="card p-8 text-center">
+    <div class="text-4xl mb-3">📊</div>
+    <h3 class="font-semibold text-gray-700">No leave balances found</h3>
+    <p class="text-sm text-gray-500 mt-1">Contact HR if you think this is an error.</p>
+  </div>
+
+  <!-- Balance Cards Grid -->
+  <div *ngIf="!loading && balances.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+
+    <div *ngFor="let balance of balances" class="card p-5 space-y-3">
+
+      <div class="flex items-center justify-between">
+        <h3 class="font-semibold text-gray-800">{{ balance.leaveTypeName }}</h3>
+        <span class="text-xs text-gray-400">{{ balance.year }}</span>
+      </div>
+
+      <!-- Available days highlight -->
+      <div class="text-center py-3">
+        <span class="text-3xl font-bold text-primary-600">{{ balance.availableDays }}</span>
+        <span class="text-sm text-gray-500 block mt-1">days available</span>
+      </div>
+
+      <!-- Progress Bar -->
+      <div class="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
+        <div class="h-full rounded-full transition-all duration-300"
+             [ngClass]="getProgressColor(balance)"
+             [style.width.%]="getUsagePercent(balance)">
+        </div>
+      </div>
+
+      <!-- Breakdown -->
+      <div class="grid grid-cols-2 gap-2 text-xs text-gray-500 pt-1">
+        <div>Allocated: <span class="font-medium text-gray-700">{{ balance.allocatedDays }}</span></div>
+        <div>Carry Forward: <span class="font-medium text-gray-700">{{ balance.carriedForwardDays }}</span></div>
+        <div>Used: <span class="font-medium text-gray-700">{{ balance.usedDays }}</span></div>
+        <div>Pending: <span class="font-medium text-gray-700">{{ balance.pendingDays }}</span></div>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

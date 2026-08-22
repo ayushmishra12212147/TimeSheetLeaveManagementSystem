@@ -1,0 +1,157 @@
+<div class="space-y-6">
+
+  <div class="flex items-center justify-between">
+    <div>
+      <h1 class="page-title">Reports</h1>
+      <p class="text-sm text-gray-500 mt-1">Generate and download reports</p>
+    </div>
+    <button (click)="openForm()" class="btn-primary" *ngIf="!showForm && isManager">
+      + Request Report
+    </button>
+  </div>
+
+  <div *ngIf="loading" class="card p-8 text-center">
+    <div class="w-8 h-8 border-4 border-primary-200 border-t-primary-600 rounded-full animate-spin mx-auto mb-3"></div>
+  </div>
+  <div *ngIf="errorMessage && !loading" class="card p-4 bg-red-50 border-red-200 text-red-700 text-sm">{{ errorMessage }}</div>
+
+  <div *ngIf="showForm" class="card p-6 max-w-lg border-2 border-primary-200">
+    <h2 class="text-lg font-semibold text-gray-800 mb-4">Request New Report</h2>
+    <form [formGroup]="reportForm" (ngSubmit)="submitForm()" class="space-y-4">
+      <div>
+        <label class="label">Report Type <span class="text-red-500">*</span></label>
+        <select formControlName="reportType" class="input-field">
+          <option *ngFor="let t of reportTypes" [ngValue]="t.value">{{ t.label }}</option>
+        </select>
+      </div>
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="label">From <span class="text-red-500">*</span></label>
+          <input formControlName="dateFrom" type="date" class="input-field" />
+        </div>
+        <div>
+          <label class="label">To <span class="text-red-500">*</span></label>
+          <input formControlName="dateTo" type="date" class="input-field" />
+        </div>
+      </div>
+      <div class="flex gap-3">
+        <button type="submit" class="btn-primary" [disabled]="formLoading">
+          <span *ngIf="!formLoading">Submit</span>
+          <span *ngIf="formLoading">Submitting...</span>
+        </button>
+        <button type="button" (click)="closeForm()" class="btn-secondary">Cancel</button>
+      </div>
+    </form>
+  </div>
+
+  <div *ngIf="!loading && reports.length > 0" class="space-y-4">
+    <div *ngFor="let r of reports" class="card p-5 space-y-3">
+      <div class="flex items-start justify-between">
+        <div>
+          <h3 class="font-semibold text-gray-800">{{ r.reportType }}</h3>
+          <p class="text-sm text-gray-500 mt-0.5">
+            {{ r.dateFrom | date:'dd MMM yyyy' }} - {{ r.dateTo | date:'dd MMM yyyy' }}
+          </p>
+        </div>
+        <span class="badge" [ngClass]="getStatusBadge(r.status)">{{ getStatusLabel(r.status) }}</span>
+      </div>
+
+      <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 text-sm">
+        <div>
+          <span class="text-gray-400 text-xs block">Requested By</span>
+          <span class="text-gray-700">{{ r.requestedByName }}</span>
+        </div>
+        <div>
+          <span class="text-gray-400 text-xs block">Requested On</span>
+          <span class="text-gray-700">{{ r.createdAtUtc | date:'dd MMM yyyy' }}</span>
+        </div>
+        <div *ngIf="r.approvedByName">
+          <span class="text-gray-400 text-xs block">Approved By</span>
+          <span class="text-gray-700">{{ r.approvedByName }}</span>
+        </div>
+        <div *ngIf="r.rejectedByName">
+          <span class="text-gray-400 text-xs block">Rejected By</span>
+          <span class="text-gray-700">{{ r.rejectedByName }}</span>
+        </div>
+        <div *ngIf="r.rejectionReason">
+          <span class="text-gray-400 text-xs block">Reason</span>
+          <span class="text-red-600 text-xs">{{ r.rejectionReason }}</span>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3 pt-2 border-t border-gray-100 flex-wrap">
+        <button (click)="toggleDetails(r)" class="btn-secondary btn-sm text-xs">
+          {{ isDetailsOpen(r) ? 'Hide Details' : 'View Details' }}
+        </button>
+
+        <button *ngIf="isApproved(r)" (click)="exportReport(r, 'pdf')" class="btn-secondary btn-sm text-xs">
+          PDF
+        </button>
+        <button *ngIf="isApproved(r)" (click)="exportReport(r, 'excel')" class="btn-primary btn-sm text-xs">
+          Excel
+        </button>
+
+        <ng-container *ngIf="isHRAdmin && isPending(r)">
+          <button (click)="approveReport(r)" class="btn-primary btn-sm" [disabled]="actionLoading[r.id]">
+            <span *ngIf="!actionLoading[r.id]">Approve</span>
+            <span *ngIf="actionLoading[r.id]">Processing...</span>
+          </button>
+
+          <button (click)="toggleRejectForm(r)" class="btn-danger btn-sm" *ngIf="!showRejectForm[r.id]">
+            Reject
+          </button>
+
+          <div *ngIf="showRejectForm[r.id]" class="flex items-center gap-2 flex-1">
+            <input [(ngModel)]="rejectReasonMap[r.id]" type="text"
+                   class="input-field text-sm flex-1" placeholder="Rejection reason..." />
+            <button (click)="rejectReport(r)" class="btn-danger btn-sm" [disabled]="actionLoading[r.id]">Confirm</button>
+            <button (click)="toggleRejectForm(r)" class="btn-secondary btn-sm">Cancel</button>
+          </div>
+        </ng-container>
+      </div>
+
+      <div *ngIf="isDetailsOpen(r)" class="bg-gray-50 border border-gray-200 rounded-lg p-4 text-sm">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div>
+            <span class="text-gray-400 text-xs block">Request ID</span>
+            <span class="text-gray-700 font-mono text-xs break-all">{{ r.id }}</span>
+          </div>
+          <div>
+            <span class="text-gray-400 text-xs block">Status</span>
+            <span class="text-gray-700">{{ getStatusLabel(r.status) }}</span>
+          </div>
+          <div>
+            <span class="text-gray-400 text-xs block">Scope Employee</span>
+            <span class="text-gray-700">{{ r.scopeEmployeeId || 'All visible employees' }}</span>
+          </div>
+          <div>
+            <span class="text-gray-400 text-xs block">Requester Employee ID</span>
+            <span class="text-gray-700">{{ r.requestedByEmployeeId || '-' }}</span>
+          </div>
+          <div>
+            <span class="text-gray-400 text-xs block">Date From</span>
+            <span class="text-gray-700">{{ r.dateFrom | date:'dd MMM yyyy' }}</span>
+          </div>
+          <div>
+            <span class="text-gray-400 text-xs block">Date To</span>
+            <span class="text-gray-700">{{ r.dateTo | date:'dd MMM yyyy' }}</span>
+          </div>
+          <div *ngIf="r.approvedAtUtc">
+            <span class="text-gray-400 text-xs block">Approved On</span>
+            <span class="text-gray-700">{{ r.approvedAtUtc | date:'dd MMM yyyy, h:mm a' }}</span>
+          </div>
+          <div *ngIf="r.rejectedAtUtc">
+            <span class="text-gray-400 text-xs block">Rejected On</span>
+            <span class="text-gray-700">{{ r.rejectedAtUtc | date:'dd MMM yyyy, h:mm a' }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="!loading && reports.length === 0 && !errorMessage" class="card p-8 text-center">
+    <h3 class="font-semibold text-gray-700">No reports yet</h3>
+    <p class="text-sm text-gray-500 mt-1">Request a report to get started.</p>
+  </div>
+
+</div>

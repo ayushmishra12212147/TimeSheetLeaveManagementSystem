@@ -1,0 +1,146 @@
+<div class="space-y-6">
+
+  <!-- Header -->
+  <div class="flex items-center gap-4">
+    <button (click)="goBack()" class="text-gray-500 hover:text-gray-700 p-1">
+      ← Back
+    </button>
+    <div>
+      <h1 class="page-title">Apply for Leave</h1>
+      <p class="text-sm text-gray-500 mt-1">Fill in the details to submit a leave request</p>
+    </div>
+  </div>
+
+  <!-- Success Message -->
+  <div *ngIf="successMessage"
+       class="card p-4 bg-green-50 border-green-200 text-green-700 text-sm">
+    ✅ {{ successMessage }}
+  </div>
+
+  <!-- Error Message -->
+  <div *ngIf="errorMessage"
+       class="card p-4 bg-red-50 border-red-200 text-red-700 text-sm">
+    ⚠️ {{ errorMessage }}
+  </div>
+
+  <!-- Form Card -->
+  <div class="card p-6 max-w-2xl">
+    <form [formGroup]="leaveForm" (ngSubmit)="submit()" class="space-y-5">
+      
+
+      <!-- Leave Type -->
+      <div>
+        <label for="leaveTypeId" class="label">Leave Type <span class="text-red-500">*</span></label>
+        <select id="leaveTypeId" formControlName="leaveTypeId" class="input-field"
+                [ngClass]="{ 'input-error': isFieldInvalid('leaveTypeId') }">
+          <option value="">-- Select Leave Type --</option>
+          <option *ngFor="let type of leaveTypes" [value]="type.id">
+            {{ type.name }} ({{ type.defaultAnnualQuota }} days/year)
+          </option>
+        </select>
+        <p *ngIf="isFieldInvalid('leaveTypeId')" class="text-red-500 text-xs mt-1">
+          Leave type is required.
+        </p>
+        <!-- Selected type info -->
+        <div *ngIf="getSelectedLeaveType() as selectedType" class="mt-2 p-3 bg-blue-50 rounded-lg text-xs text-blue-700">
+          <span *ngIf="selectedType.isAutoApprove" class="font-medium">⚡ Auto-approved</span>
+          <span *ngIf="selectedType.requiresDocument" class="font-medium ml-3">📎 Document required</span>
+          <span *ngIf="selectedType.description" class="block mt-1 text-blue-600">{{ selectedType.description }}</span>
+        </div>
+      </div>
+
+      <!-- Date Range - Sub FormGroup concept shown via side-by-side layout -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <label for="startDate" class="label">Start Date <span class="text-red-500">*</span></label>
+          <input id="startDate" formControlName="startDate" type="date" class="input-field"
+                 [ngClass]="{ 'input-error': isFieldInvalid('startDate') }" />
+          <p *ngIf="isFieldInvalid('startDate')" class="text-red-500 text-xs mt-1">
+            Start date is required.
+          </p>
+        </div>
+        <div>
+          <label for="endDate" class="label">End Date <span class="text-red-500">*</span></label>
+          <input id="endDate" formControlName="endDate" type="date" class="input-field"
+                 [ngClass]="{ 'input-error': isFieldInvalid('endDate') }"
+                 [attr.disabled]="leaveForm.get('isHalfDay')?.value ? '' : null" />
+          <p *ngIf="isFieldInvalid('endDate')" class="text-red-500 text-xs mt-1">
+            End date is required.
+          </p>
+        </div>
+      </div>
+      <!-- Cross-field validation error -->
+      <p *ngIf="leaveForm.hasError('dateRangeInvalid') && leaveForm.touched"
+         class="text-red-500 text-xs -mt-3">
+        End date must be on or after start date.
+      </p>
+
+      <!-- Half Day Toggle -->
+      <div class="flex items-center gap-4">
+        <label class="flex items-center gap-2 cursor-pointer">
+          <input type="checkbox" formControlName="isHalfDay"
+                 class="w-4 h-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500" />
+          <span class="text-sm font-medium text-gray-700">Half Day Leave</span>
+        </label>
+
+        <div *ngIf="leaveForm.get('isHalfDay')?.value">
+          <select formControlName="halfDaySession" class="input-field w-auto text-sm">
+            <option [value]="0">-- Select Session --</option>
+            <option [value]="1">Morning (First Half)</option>
+            <option [value]="2">Afternoon (Second Half)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Reason -->
+      <div>
+        <label for="reason" class="label">Reason <span class="text-red-500">*</span></label>
+        <textarea id="reason" formControlName="reason" rows="3"
+                  class="input-field resize-none"
+                  [ngClass]="{ 'input-error': isFieldInvalid('reason') }"
+                  placeholder="Provide a reason for your leave..."></textarea>
+        <div class="flex justify-between mt-1">
+          <p *ngIf="isFieldInvalid('reason')" class="text-red-500 text-xs">
+            <span *ngIf="leaveForm.get('reason')?.errors?.['required']">Reason is required.</span>
+            <span *ngIf="leaveForm.get('reason')?.errors?.['minlength']">At least 5 characters required.</span>
+          </p>
+          <span class="text-xs text-gray-400">
+            {{ leaveForm.get('reason')?.value?.length || 0 }}/500
+          </span>
+        </div>
+      </div>
+
+      <!-- Document URL (optional) -->
+      <div *ngIf="getSelectedLeaveType()?.requiresDocument">
+        <label for="docUrl" class="label">Supporting Document URL</label>
+        <input id="docUrl" formControlName="supportingDocumentUrl" type="url"
+               class="input-field" placeholder="https://..." />
+      </div>
+
+      <!-- Submit -->
+      <div class="flex items-center gap-3 pt-2">
+        <button type="submit" class="btn-primary" [disabled]="loading">
+          <span *ngIf="!loading">Submit Leave Request</span>
+          <span *ngIf="loading" class="flex items-center gap-2">
+            <span class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+            Submitting...
+          </span>
+        </button>
+        <button type="button" (click)="goBack()" class="btn-secondary">Cancel</button>
+      </div>
+
+      <!-- Form State Debug (helpful for learning) -->
+      <div class="mt-4 p-3 bg-gray-50 rounded-lg text-xs text-gray-500 space-y-1">
+        <p><strong>Form State:</strong>
+          <span class="ml-2" [ngClass]="leaveForm.valid ? 'text-green-600' : 'text-red-500'">
+            {{ leaveForm.valid ? '✓ Valid' : '✗ Invalid' }}
+          </span>
+          · {{ leaveForm.pristine ? 'Pristine' : 'Dirty' }}
+          · {{ leaveForm.touched ? 'Touched' : 'Untouched' }}
+        </p>
+      </div>
+
+    </form>
+  </div>
+
+</div>
