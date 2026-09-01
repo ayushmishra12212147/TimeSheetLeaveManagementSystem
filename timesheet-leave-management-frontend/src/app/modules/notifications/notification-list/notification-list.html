@@ -1,0 +1,28 @@
+<div class="space-y-6">
+  <div class="flex items-center justify-between">
+    <div><h1 class="page-title">Notifications</h1><p class="text-sm text-gray-500 mt-1">{{ unreadCount }} unread</p></div>
+    <button *ngIf="unreadCount > 0" (click)="markAllRead()" class="btn-secondary btn-sm">Mark All Read</button>
+  </div>
+  <div *ngIf="loading" class="card p-8 text-center"><div class="w-8 h-8 border-4 border-primary-200 border-t-primary-600 rounded-full animate-spin mx-auto mb-3"></div></div>
+  <div *ngIf="errorMessage && !loading" class="card p-4 bg-red-50 border-red-200 text-red-700 text-sm">⚠️ {{ errorMessage }}</div>
+  <div *ngIf="!loading && notifications.length === 0" class="card p-8 text-center"><div class="text-4xl mb-3">🔔</div><h3 class="font-semibold text-gray-700">No notifications</h3></div>
+
+  <div *ngIf="!loading && notifications.length > 0" class="space-y-2">
+    <div *ngFor="let n of notifications"
+         (click)="markRead(n)"
+         class="card p-4 cursor-pointer transition-all hover:shadow-md"
+         [ngClass]="n.isRead ? 'bg-white opacity-70' : 'bg-primary-50 border-primary-200'">
+      <div class="flex items-start justify-between">
+        <div class="flex-1">
+          <div class="flex items-center gap-2">
+            <span *ngIf="!n.isRead" class="w-2 h-2 bg-primary-600 rounded-full flex-shrink-0"></span>
+            <h4 class="font-semibold text-gray-800 text-sm">{{ n.title }}</h4>
+            <span class="badge badge-info text-xs">{{ n.type }}</span>
+          </div>
+          <p class="text-sm text-gray-600 mt-1">{{ n.message }}</p>
+        </div>
+        <span class="text-xs text-gray-400 flex-shrink-0 ml-4">{{ n.createdAtUtc | date:'dd MMM, hh:mm a' }}</span>
+      </div>
+    </div>
+  </div>
+</div>

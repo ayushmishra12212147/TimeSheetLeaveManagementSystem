@@ -1,0 +1,609 @@
+{
+  "Routes": [
+
+    // ================= AUTH =================
+    {
+      "DownstreamPathTemplate": "/api/v1/auth/login",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7097
+        }
+      ],
+      "UpstreamPathTemplate": "/api/v1/auth/login",
+      "UpstreamHttpMethod": [ "POST" ],
+      "SwaggerKey": "auth"
+    },
+    {
+      "DownstreamPathTemplate": "/api/v1/auth/refresh",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7097
+        }
+      ],
+      "UpstreamPathTemplate": "/api/v1/auth/refresh",
+      "UpstreamHttpMethod": [ "POST" ],
+      "SwaggerKey": "auth"
+    },
+    {
+      "DownstreamPathTemplate": "/api/v1/auth/forgot-password",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7097
+        }
+      ],
+      "UpstreamPathTemplate": "/api/v1/auth/forgot-password",
+      "UpstreamHttpMethod": [ "POST" ],
+      "SwaggerKey": "auth"
+    },
+    {
+      "DownstreamPathTemplate": "/api/v1/auth/reset-password",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7097
+        }
+      ],
+      "UpstreamPathTemplate": "/api/v1/auth/reset-password",
+      "UpstreamHttpMethod": [ "GET", "POST" ],
+      "SwaggerKey": "auth"
+    },
+    {
+      "DownstreamPathTemplate": "/api/v1/auth/me",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7097
+        }
+      ],
+      "UpstreamPathTemplate": "/api/v1/auth/me",
+      "UpstreamHttpMethod": [ "GET" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      },
+      "SwaggerKey": "auth"
+    },
+    {
+      "DownstreamPathTemplate": "/api/v1/auth/logout",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7097
+        }
+      ],
+      "UpstreamPathTemplate": "/api/v1/auth/logout",
+      "UpstreamHttpMethod": [ "POST" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      },
+      "SwaggerKey": "auth"
+    },
+    {
+      "DownstreamPathTemplate": "/api/v1/auth/first-login/reset-password",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7097
+        }
+      ],
+      "UpstreamPathTemplate": "/api/v1/auth/first-login/reset-password",
+      "UpstreamHttpMethod": [ "POST" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      },
+      "SwaggerKey": "auth"
+    },
+    {
+      "DownstreamPathTemplate": "/swagger/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7097
+        }
+      ],
+      "UpstreamPathTemplate": "/api/v1/auth/swagger/{everything}",
+      "SwaggerKey": "auth"
+    },
+
+    // ================= AUDIT =================
+    {
+      "DownstreamPathTemplate": "/api/v1/audit/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7016
+        }
+      ],
+      "UpstreamPathTemplate": "/api/v1/audit/{everything}",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      },
+      "SwaggerKey": "audit"
+    },
+    {
+      "DownstreamPathTemplate": "/swagger/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7016
+        }
+      ],
+      "UpstreamPathTemplate": "/api/v1/audit/swagger/{everything}",
+      "SwaggerKey": "audit"
+    },
+
+    // ================= EMPLOYEE =================
+    {
+      "DownstreamPathTemplate": "/api/users",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7212
+        }
+      ],
+      "UpstreamPathTemplate": "/api/v1/users",
+      "UpstreamHttpMethod": [ "GET", "POST" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      },
+      "SwaggerKey": "employee"
+    },
+    {
+      "DownstreamPathTemplate": "/api/users/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7212
+        }
+      ],
+      "UpstreamPathTemplate": "/api/v1/users/{everything}",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      },
+      "SwaggerKey": "employee"
+    },
+    {
+      "DownstreamPathTemplate": "/api/departments",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7212
+        }
+      ],
+      "UpstreamPathTemplate": "/api/v1/departments",
+      "UpstreamHttpMethod": [ "GET", "POST" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      },
+      "SwaggerKey": "employee"
+    },
+    {
+      "DownstreamPathTemplate": "/api/departments/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7212
+        }
+      ],
+      "UpstreamPathTemplate": "/api/v1/departments/{everything}",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      },
+      "SwaggerKey": "employee"
+    },
+    {
+      "DownstreamPathTemplate": "/swagger/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7212
+        }
+      ],
+      "UpstreamPathTemplate": "/api/v1/users/swagger/{everything}",
+      "SwaggerKey": "employee"
+    },
+    {
+      "DownstreamPathTemplate": "/api/attendance/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7212
+        }
+      ],
+      "UpstreamPathTemplate": "/api/v1/attendance/{everything}",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      },
+      "SwaggerKey": "employee"
+    },
+
+    // ================= HOLIDAY =================
+    {
+      "DownstreamPathTemplate": "/api/v1/holidays/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7112
+        }
+      ],
+      "UpstreamPathTemplate": "/api/v1/holidays/{everything}",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      },
+      "SwaggerKey": "holiday"
+    },
+    {
+      "DownstreamPathTemplate": "/swagger/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7112
+        }
+      ],
+      "UpstreamPathTemplate": "/api/v1/holidays/swagger/{everything}",
+      "SwaggerKey": "holiday"
+    },
+
+    // ================= LEAVE =================
+    {
+      "DownstreamPathTemplate": "/api/v1/leaves",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7230
+        }
+      ],
+      "UpstreamPathTemplate": "/api/v1/leaves",
+      "UpstreamHttpMethod": [ "GET", "POST" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      },
+      "SwaggerKey": "leave"
+    },
+    {
+      "DownstreamPathTemplate": "/api/v1/leaves/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7230
+        }
+      ],
+      "UpstreamPathTemplate": "/api/v1/leaves/{everything}",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      },
+      "SwaggerKey": "leave"
+    },
+    {
+      "DownstreamPathTemplate": "/api/v1/leave-types",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7230
+        }
+      ],
+      "UpstreamPathTemplate": "/api/v1/leave-types",
+      "UpstreamHttpMethod": [ "GET", "POST" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      },
+      "SwaggerKey": "leave"
+    },
+    {
+      "DownstreamPathTemplate": "/api/v1/leave-types/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7230
+        }
+      ],
+      "UpstreamPathTemplate": "/api/v1/leave-types/{everything}",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      },
+      "SwaggerKey": "leave"
+    },
+    {
+      "DownstreamPathTemplate": "/api/v1/leave-balances/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7230
+        }
+      ],
+      "UpstreamPathTemplate": "/api/v1/leave-balances/{everything}",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      },
+      "SwaggerKey": "leave"
+    },
+    {
+      "DownstreamPathTemplate": "/swagger/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7230
+        }
+      ],
+      "UpstreamPathTemplate": "/api/v1/leaves/swagger/{everything}",
+      "SwaggerKey": "leave"
+    },
+
+    // ================= NOTIFICATION =================
+    {
+      "DownstreamPathTemplate": "/api/v1/notifications/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7164
+        }
+      ],
+      "UpstreamPathTemplate": "/api/v1/notifications/{everything}",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      },
+      "SwaggerKey": "notification"
+    },
+    {
+      "DownstreamPathTemplate": "/swagger/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7164
+        }
+      ],
+      "UpstreamPathTemplate": "/api/v1/notifications/swagger/{everything}",
+      "SwaggerKey": "notification"
+    },
+    {
+      "DownstreamPathTemplate": "/hubs/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7164
+        }
+      ],
+      "UpstreamPathTemplate": "/hubs/{everything}",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
+    },
+
+    // ================= REPORT =================
+    {
+      "DownstreamPathTemplate": "/api/v1/reports/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7037
+        }
+      ],
+      "UpstreamPathTemplate": "/api/v1/reports/{everything}",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      },
+      "SwaggerKey": "report"
+    },
+    {
+      "DownstreamPathTemplate": "/swagger/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7037
+        }
+      ],
+      "UpstreamPathTemplate": "/api/v1/reports/swagger/{everything}",
+      "SwaggerKey": "report"
+    },
+
+    // ================= TIMESHEET =================
+    {
+      "DownstreamPathTemplate": "/api/v1/timesheets/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7005
+        }
+      ],
+      "UpstreamPathTemplate": "/api/v1/timesheets/{everything}",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      },
+      "SwaggerKey": "timesheet"
+    },
+    {
+      "DownstreamPathTemplate": "/api/v1/timesheets",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7005
+        }
+      ],
+      "UpstreamPathTemplate": "/api/v1/timesheets",
+      "UpstreamHttpMethod": [ "POST" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      },
+      "SwaggerKey": "timesheet"
+    },
+    {
+      "DownstreamPathTemplate": "/api/v1/projects",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7005
+        }
+      ],
+      "UpstreamPathTemplate": "/api/v1/projects",
+      "UpstreamHttpMethod": [ "GET", "POST" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      },
+      "SwaggerKey": "timesheet"
+    },
+    {
+      "DownstreamPathTemplate": "/api/v1/projects/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7005
+        }
+      ],
+      "UpstreamPathTemplate": "/api/v1/projects/{everything}",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      },
+      "SwaggerKey": "timesheet"
+    },
+    {
+      "DownstreamPathTemplate": "/api/v1/timesheet-config",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7005
+        }
+      ],
+      "UpstreamPathTemplate": "/api/v1/timesheet-config",
+      "UpstreamHttpMethod": [ "GET", "PUT" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      },
+      "SwaggerKey": "timesheet"
+    },
+    {
+      "DownstreamPathTemplate": "/swagger/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7005
+        }
+      ],
+      "UpstreamPathTemplate": "/api/v1/timesheets/swagger/{everything}",
+      "SwaggerKey": "timesheet"
+    }
+  ],
+
+  "SwaggerEndPoints": [
+    {
+      "Key": "auth",
+      "Config": [
+        {
+          "Name": "Auth API",
+          "Version": "v1",
+          "Url": "https://localhost:7097/swagger/v1/swagger.json"
+        }
+      ]
+    },
+    {
+      "Key": "audit",
+      "Config": [
+        {
+          "Name": "Audit API",
+          "Version": "v1",
+          "Url": "https://localhost:7016/swagger/v1/swagger.json"
+        }
+      ]
+    },
+    {
+      "Key": "employee",
+      "Config": [
+        {
+          "Name": "Employee API",
+          "Version": "v1",
+          "Url": "https://localhost:7212/swagger/v1/swagger.json"
+        }
+      ]
+    },
+    {
+      "Key": "holiday",
+      "Config": [
+        {
+          "Name": "Holiday API",
+          "Version": "v1",
+          "Url": "https://localhost:7112/swagger/v1/swagger.json"
+        }
+      ]
+    },
+    {
+      "Key": "leave",
+      "Config": [
+        {
+          "Name": "Leave API",
+          "Version": "v1",
+          "Url": "https://localhost:7230/swagger/v1/swagger.json"
+        }
+      ]
+    },
+    {
+      "Key": "notification",
+      "Config": [
+        {
+          "Name": "Notification API",
+          "Version": "v1",
+          "Url": "https://localhost:7164/swagger/v1/swagger.json"
+        }
+      ]
+    },
+    {
+      "Key": "report",
+      "Config": [
+        {
+          "Name": "Report API",
+          "Version": "v1",
+          "Url": "https://localhost:7037/swagger/v1/swagger.json"
+        }
+      ]
+    },
+    {
+      "Key": "timesheet",
+      "Config": [
+        {
+          "Name": "Timesheet API",
+          "Version": "v1",
+          "Url": "https://localhost:7005/swagger/v1/swagger.json"
+        }
+      ]
+    }
+  ],
+
+  "GlobalConfiguration": {
+    "BaseUrl": "https://localhost:7277"
+  }
+}

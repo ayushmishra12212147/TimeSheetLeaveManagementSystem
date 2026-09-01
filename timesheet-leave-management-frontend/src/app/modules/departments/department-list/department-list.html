@@ -1,0 +1,21 @@
+<div class="space-y-6">
+  <div class="flex items-center justify-between"><div><h1 class="page-title">Departments</h1><p class="text-sm text-gray-500 mt-1">Manage organizational departments</p></div>
+    <button (click)="openCreate()" class="btn-primary" *ngIf="!showForm">+ Add Department</button></div>
+  <div *ngIf="loading" class="card p-8 text-center"><div class="w-8 h-8 border-4 border-primary-200 border-t-primary-600 rounded-full animate-spin mx-auto mb-3"></div></div>
+  <div *ngIf="errorMessage && !loading" class="card p-4 bg-red-50 border-red-200 text-red-700 text-sm">⚠️ {{ errorMessage }}</div>
+
+  <div *ngIf="showForm" class="card p-6 max-w-md border-2 border-primary-200">
+    <h2 class="text-lg font-semibold text-gray-800 mb-4">{{ editingId ? 'Edit' : 'Create' }} Department</h2>
+    <form [formGroup]="deptForm" (ngSubmit)="submit()" class="space-y-4">
+      <div><label class="label">Name <span class="text-red-500">*</span></label><input formControlName="name" class="input-field" placeholder="e.g. Engineering" /></div>
+      <div class="flex gap-3"><button type="submit" class="btn-primary" [disabled]="formLoading">{{ editingId ? 'Update' : 'Create' }}</button><button type="button" (click)="closeForm()" class="btn-secondary">Cancel</button></div>
+    </form>
+  </div>
+
+  <div *ngIf="!loading && departments.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div *ngFor="let d of departments" class="card p-4 flex items-center justify-between">
+      <div><h3 class="font-semibold text-gray-800">{{ d.name }}</h3><p class="text-xs text-gray-400 mt-0.5">ID: {{ d.id.slice(0,8) }}...</p></div>
+      <div class="flex gap-2"><button (click)="openEdit(d)" class="btn-secondary btn-sm text-xs">Edit</button></div>
+    </div>
+  </div>
+</div>

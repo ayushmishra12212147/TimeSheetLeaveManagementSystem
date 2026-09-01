@@ -1,0 +1,100 @@
+<div class="space-y-6">
+
+  <!-- Header -->
+  <div>
+    <h1 class="page-title">Pending Leave Approvals</h1>
+    <p class="text-sm text-gray-500 mt-1">Review and approve or reject team leave requests</p>
+  </div>
+
+  <!-- Loading -->
+  <div *ngIf="loading" class="card p-8 text-center">
+    <div class="w-8 h-8 border-4 border-primary-200 border-t-primary-600 rounded-full animate-spin mx-auto mb-3"></div>
+    <p class="text-gray-500 text-sm">Loading pending requests...</p>
+  </div>
+
+  <!-- Error -->
+  <div *ngIf="errorMessage && !loading" class="card p-4 bg-red-50 border-red-200 text-red-700 text-sm">
+    ⚠️ {{ errorMessage }}
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="!loading && !errorMessage && pendingLeaves.length === 0" class="card p-8 text-center">
+    <div class="text-4xl mb-3">✅</div>
+    <h3 class="font-semibold text-gray-700">No pending approvals</h3>
+    <p class="text-sm text-gray-500 mt-1">All leave requests have been reviewed.</p>
+  </div>
+
+  <!-- Approval Cards -->
+  <div *ngFor="let leave of pendingLeaves" class="card p-5 space-y-4">
+
+    <!-- Header Row -->
+    <div class="flex items-start justify-between">
+      <div>
+        <h3 class="font-semibold text-gray-800">{{ leave.employeeName }}
+          <span class="text-sm text-gray-400 font-normal ml-1">({{ leave.employeeId }})</span>
+        </h3>
+        <p class="text-sm text-gray-500 mt-0.5">{{ leave.leaveTypeName }}
+          <span *ngIf="leave.isHalfDay" class="text-xs text-gray-400 ml-1">· Half Day ({{ leave.halfDaySession }})</span>
+          <span *ngIf="leave.isUnpaid" class="badge badge-danger ml-2 text-xs">Unpaid</span>
+        </p>
+      </div>
+      <span class="badge badge-warning">{{ getStatusLabel(leave.status) }}</span>
+    </div>
+
+    <!-- Details Grid -->
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-sm">
+      <div>
+        <span class="text-gray-400 block text-xs">From</span>
+        <span class="text-gray-700">{{ leave.startDate | date:'dd MMM yyyy' }}</span>
+      </div>
+      <div>
+        <span class="text-gray-400 block text-xs">To</span>
+        <span class="text-gray-700">{{ leave.endDate | date:'dd MMM yyyy' }}</span>
+      </div>
+      <div>
+        <span class="text-gray-400 block text-xs">Days</span>
+        <span class="text-gray-700 font-medium">{{ leave.requestedDays }}</span>
+      </div>
+      <div>
+        <span class="text-gray-400 block text-xs">Applied</span>
+        <span class="text-gray-700">{{ leave.createdAtUtc | date:'dd MMM' }}</span>
+      </div>
+    </div>
+
+    <!-- Reason -->
+    <div class="text-sm">
+      <span class="text-gray-400 text-xs">Reason:</span>
+      <p class="text-gray-700 mt-0.5">{{ leave.reason }}</p>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="flex items-center gap-3 pt-2 border-t border-gray-100">
+      <button (click)="approveLeave(leave)"
+              class="btn-primary btn-sm"
+              [disabled]="actionLoading[leave.id]">
+        <span *ngIf="!actionLoading[leave.id]">✓ Approve</span>
+        <span *ngIf="actionLoading[leave.id]">Processing...</span>
+      </button>
+
+      <button (click)="toggleRejectForm(leave)"
+              class="btn-danger btn-sm"
+              *ngIf="!showRejectForm[leave.id]">
+        ✗ Reject
+      </button>
+
+      <!-- Inline Reject Form -->
+      <div *ngIf="showRejectForm[leave.id]" class="flex-1 flex items-center gap-2">
+        <input [(ngModel)]="rejectReasonMap[leave.id]"
+               type="text"
+               class="input-field text-sm flex-1"
+               placeholder="Rejection reason..." />
+        <button (click)="rejectLeave(leave)" class="btn-danger btn-sm" [disabled]="actionLoading[leave.id]">
+          Confirm
+        </button>
+        <button (click)="toggleRejectForm(leave)" class="btn-secondary btn-sm">Cancel</button>
+      </div>
+    </div>
+
+  </div>
+
+</div>

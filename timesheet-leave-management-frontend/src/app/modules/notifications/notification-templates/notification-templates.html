@@ -1,0 +1,81 @@
+<div class="space-y-6">
+  <div>
+    <h1 class="page-title">Notification Templates</h1>
+    <p class="text-sm text-gray-500 mt-1">Manage email and in-app notification templates</p>
+  </div>
+
+  <div *ngIf="loading" class="card p-8 text-center">
+    <div class="w-8 h-8 border-4 border-primary-200 border-t-primary-600 rounded-full animate-spin mx-auto mb-3"></div>
+  </div>
+  <div *ngIf="errorMessage && !loading" class="card p-4 bg-red-50 border-red-200 text-red-700 text-sm">⚠️ {{ errorMessage }}</div>
+
+  <!-- Edit Form -->
+  <div *ngIf="showForm" class="card p-6 max-w-2xl border-2 border-primary-200">
+    <h2 class="text-lg font-semibold text-gray-800 mb-4">Edit Template</h2>
+    <form [formGroup]="templateForm" (ngSubmit)="submit()" class="space-y-4">
+      <div>
+        <label class="label">Event Key</label>
+        <input formControlName="eventKey" class="input-field bg-gray-50" readonly />
+      </div>
+      <div>
+        <label class="label">Template Name <span class="text-red-500">*</span></label>
+        <input formControlName="name" class="input-field" placeholder="Template name" />
+      </div>
+      <div>
+        <label class="label">Subject Template <span class="text-red-500">*</span></label>
+        <input formControlName="subjectTemplate" class="input-field" placeholder="e.g. Leave Request Approved" />
+      </div>
+      <div>
+        <label class="label">Body Template <span class="text-red-500">*</span></label>
+        <textarea formControlName="bodyTemplate" rows="5" class="input-field resize-none font-mono text-xs"
+                  placeholder="Template body with dynamic variables..."></textarea>
+        <p class="text-xs text-gray-400 mt-1">Use double-brace syntax for dynamic values, e.g. EmployeeName, LeaveType.</p>
+      </div>
+      <div>
+        <label class="label">Description</label>
+        <textarea formControlName="description" rows="2" class="input-field resize-none"
+                  placeholder="Optional description..."></textarea>
+      </div>
+      <label class="flex items-center gap-2 cursor-pointer text-sm">
+        <input type="checkbox" formControlName="isActive"
+               class="w-4 h-4 text-primary-600 border-gray-300 rounded" />
+        Active
+      </label>
+      <div class="flex gap-3">
+        <button type="submit" class="btn-primary" [disabled]="formLoading">Save</button>
+        <button type="button" (click)="closeForm()" class="btn-secondary">Cancel</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Templates List -->
+  <div *ngIf="!loading && templates.length > 0" class="card overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead class="bg-gray-50 border-b border-gray-200">
+          <tr>
+            <th class="text-left px-4 py-3 font-semibold text-gray-600">Event Key</th>
+            <th class="text-left px-4 py-3 font-semibold text-gray-600">Subject</th>
+            <th class="text-left px-4 py-3 font-semibold text-gray-600">Updated</th>
+            <th class="text-right px-4 py-3 font-semibold text-gray-600">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let t of templates" class="border-b border-gray-100 hover:bg-gray-50">
+            <td class="px-4 py-3"><span class="badge badge-info text-xs font-mono">{{ t.eventKey }}</span></td>
+            <td class="px-4 py-3 text-gray-700 max-w-[300px] truncate" [title]="t.subjectTemplate">{{ t.subjectTemplate }}</td>
+            <td class="px-4 py-3 text-gray-500 text-xs">{{ t.updatedAtUtc | date:'dd MMM yyyy' }}</td>
+            <td class="px-4 py-3 text-right">
+              <button (click)="openEdit(t)" class="btn-secondary btn-sm text-xs">Edit</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div *ngIf="!loading && templates.length === 0 && !errorMessage" class="card p-8 text-center">
+    <div class="text-4xl mb-3">📧</div>
+    <h3 class="font-semibold text-gray-700">No templates found</h3>
+  </div>
+</div>

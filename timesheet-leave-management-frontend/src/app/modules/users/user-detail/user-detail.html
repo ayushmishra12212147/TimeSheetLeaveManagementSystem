@@ -1,0 +1,72 @@
+<div class="space-y-6">
+  <div class="flex items-center gap-4">
+    <button (click)="goBack()" class="text-gray-500 hover:text-gray-700 p-1">← Back</button>
+    <h1 class="page-title">User Detail</h1>
+  </div>
+
+  <div *ngIf="loading" class="card p-8 text-center">
+    <div class="w-8 h-8 border-4 border-primary-200 border-t-primary-600 rounded-full animate-spin mx-auto mb-3"></div>
+  </div>
+  <div *ngIf="errorMessage && !loading" class="card p-4 bg-red-50 border-red-200 text-red-700 text-sm">⚠️ {{ errorMessage }}</div>
+
+  <div *ngIf="user && !loading" class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+    <!-- Profile Card -->
+    <div class="card p-6 space-y-4">
+      <div class="text-center">
+        <div class="w-16 h-16 rounded-full bg-primary-600 text-white flex items-center justify-center text-2xl font-bold mx-auto mb-3">
+          {{ user.fullName.charAt(0).toUpperCase() }}
+        </div>
+        <h2 class="font-bold text-gray-900 text-lg">{{ user.fullName }}</h2>
+        <p class="text-sm text-gray-500">{{ user.employeeId }}</p>
+        <span class="badge mt-2" [ngClass]="getRoleBadge(user.role)">{{ user.role }}</span>
+      </div>
+
+      <div class="border-t border-gray-100 pt-4 space-y-3 text-sm">
+        <div class="flex justify-between">
+          <span class="text-gray-500">Email</span>
+          <span class="text-gray-800 font-medium">{{ user.email }}</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-gray-500">Department</span>
+          <span class="text-gray-800 font-medium">{{ user.departmentName }}</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-gray-500">Manager</span>
+          <span class="text-gray-800 font-medium">{{ user.managerName || 'None' }}</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-gray-500">Status</span>
+          <span class="badge" [ngClass]="user.isActive ? 'badge-success' : 'badge-gray'">
+            {{ user.isActive ? 'Active' : 'Inactive' }}
+          </span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-gray-500">Joined</span>
+          <span class="text-gray-800">{{ user.createdAtUtc ? (user.createdAtUtc | date:'dd MMM yyyy') : 'Not available' }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Leave Balances -->
+    <div class="lg:col-span-2 card p-6">
+      <h3 class="font-semibold text-gray-800 mb-4">Leave Balances</h3>
+      <div *ngIf="balances.length === 0" class="text-sm text-gray-500">No leave balances found.</div>
+      <div *ngIf="balances.length > 0" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div *ngFor="let b of balances" class="bg-gray-50 rounded-lg p-4 border border-gray-200">
+          <div class="flex justify-between items-center mb-2">
+            <span class="font-medium text-gray-800 text-sm">{{ b.leaveTypeName }}</span>
+            <span class="text-xs text-gray-400">{{ b.year }}</span>
+          </div>
+          <div class="text-2xl font-bold text-primary-600">{{ b.availableDays }}</div>
+          <div class="text-xs text-gray-500 mt-1">days available of {{ b.allocatedDays }} allocated</div>
+          <div class="w-full h-1.5 bg-gray-200 rounded-full mt-2">
+            <div class="h-full bg-primary-500 rounded-full"
+                 [style.width.%]="b.allocatedDays > 0 ? (b.usedDays / b.allocatedDays * 100) : 0"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

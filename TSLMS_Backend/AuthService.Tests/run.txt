@@ -1,0 +1,2 @@
+cd "C:\Users\ayush\OneDrive\Desktop\CapgeminiTrainning\Tslms fullstack"
+dotnet test .\TSLMS_Backend\AuthService.Tests\AuthService.Tests.csproj -v minimal

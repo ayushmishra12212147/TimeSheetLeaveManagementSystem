@@ -1,0 +1,74 @@
+<div class="space-y-6">
+
+  <div>
+    <h1 class="page-title">Timesheet Configuration</h1>
+    <p class="text-sm text-gray-500 mt-1">Manage system-wide timesheet settings</p>
+  </div>
+
+  <!-- Loading -->
+  <div *ngIf="loading" class="card p-8 text-center">
+    <div class="w-8 h-8 border-4 border-primary-200 border-t-primary-600 rounded-full animate-spin mx-auto mb-3"></div>
+    <p class="text-gray-500 text-sm">Loading config...</p>
+  </div>
+
+  <!-- Success -->
+  <div *ngIf="successMessage" class="card p-4 bg-green-50 border-green-200 text-green-700 text-sm">
+    ✅ {{ successMessage }}
+  </div>
+
+  <!-- Error -->
+  <div *ngIf="errorMessage" class="card p-4 bg-red-50 border-red-200 text-red-700 text-sm">
+    ⚠️ {{ errorMessage }}
+  </div>
+
+  <!-- Config Form -->
+  <div *ngIf="!loading" class="card p-6 max-w-2xl">
+    <form [formGroup]="configForm" (ngSubmit)="submit()" class="space-y-5">
+
+      <div>
+        <label class="label">Minimum Weekly Hours <span class="text-red-500">*</span></label>
+        <input formControlName="minimumWeeklyHours" type="number" class="input-field" min="1" max="168" />
+        <p class="text-xs text-gray-400 mt-1">Employees must log at least this many hours per week.</p>
+        <p *ngIf="isFieldInvalid('minimumWeeklyHours')" class="text-red-500 text-xs mt-1">
+          Must be between 1 and 168.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <label class="label">Low Hours Warning (daily) <span class="text-red-500">*</span></label>
+          <input formControlName="lowHoursWarningThreshold" type="number" class="input-field" min="1" max="24" />
+          <p class="text-xs text-gray-400 mt-1">Flag entries below this threshold.</p>
+        </div>
+        <div>
+          <label class="label">High Hours Warning (daily) <span class="text-red-500">*</span></label>
+          <input formControlName="highHoursWarningThreshold" type="number" class="input-field" min="1" max="24" />
+          <p class="text-xs text-gray-400 mt-1">Flag entries above this threshold.</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <label class="flex items-center gap-2 cursor-pointer text-sm">
+          <input type="checkbox" formControlName="autoApproveEnabled"
+                 class="w-4 h-4 text-primary-600 border-gray-300 rounded" />
+          Enable Auto Approve
+        </label>
+      </div>
+
+      <div>
+        <label class="label">Auto Approve After (hours)</label>
+        <input formControlName="autoApproveAfterHours" type="number" class="input-field w-40" min="0" />
+        <p class="text-xs text-gray-400 mt-1">Timesheets auto-approved if manager doesn't act within this time.</p>
+      </div>
+
+      <div class="pt-2">
+        <button type="submit" class="btn-primary" [disabled]="saving">
+          <span *ngIf="!saving">Save Configuration</span>
+          <span *ngIf="saving">Saving...</span>
+        </button>
+      </div>
+
+    </form>
+  </div>
+
+</div>

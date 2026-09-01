@@ -1,0 +1,135 @@
+<div class="space-y-6">
+
+  <!-- Header -->
+  <div class="flex items-center justify-between">
+    <div>
+      <h1 class="page-title">Leave Types</h1>
+      <p class="text-sm text-gray-500 mt-1">Manage leave types and quotas</p>
+    </div>
+    <button (click)="openCreateForm()" class="btn-primary" *ngIf="!showForm">
+      + Add Leave Type
+    </button>
+  </div>
+
+  <!-- Loading -->
+  <div *ngIf="loading" class="card p-8 text-center">
+    <div class="w-8 h-8 border-4 border-primary-200 border-t-primary-600 rounded-full animate-spin mx-auto mb-3"></div>
+    <p class="text-gray-500 text-sm">Loading...</p>
+  </div>
+
+  <!-- Error -->
+  <div *ngIf="errorMessage && !loading" class="card p-4 bg-red-50 border-red-200 text-red-700 text-sm">
+    ⚠️ {{ errorMessage }}
+  </div>
+
+  <!-- ─── Create/Edit Form ────────────────────────── -->
+  <div *ngIf="showForm" class="card p-6 max-w-2xl border-2 border-primary-200">
+    <h2 class="text-lg font-semibold text-gray-800 mb-4">
+      {{ editingId ? 'Edit Leave Type' : 'Create Leave Type' }}
+    </h2>
+
+    <form [formGroup]="typeForm" (ngSubmit)="submitForm()" class="space-y-4">
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <label class="label">Name <span class="text-red-500">*</span></label>
+          <input formControlName="name" class="input-field" placeholder="e.g. Casual Leave"
+                 [ngClass]="{ 'input-error': isFieldInvalid('name') }" />
+          <p *ngIf="isFieldInvalid('name')" class="text-red-500 text-xs mt-1">Name is required (min 2 chars).</p>
+        </div>
+        <div>
+          <label class="label">Code <span class="text-red-500">*</span></label>
+          <input formControlName="code" class="input-field" placeholder="e.g. CL"
+                 [ngClass]="{ 'input-error': isFieldInvalid('code') }" />
+          <p *ngIf="isFieldInvalid('code')" class="text-red-500 text-xs mt-1">Code is required (2-10 chars).</p>
+        </div>
+      </div>
+
+      <div>
+        <label class="label">Description</label>
+        <textarea formControlName="description" class="input-field resize-none" rows="2"
+                  placeholder="Optional description..."></textarea>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <label class="label">Annual Quota (days) <span class="text-red-500">*</span></label>
+          <input formControlName="defaultAnnualQuota" type="number" class="input-field" min="0"
+                 [ngClass]="{ 'input-error': isFieldInvalid('defaultAnnualQuota') }" />
+        </div>
+        <div>
+          <label class="label">Max Carry Forward (days)</label>
+          <input formControlName="maxCarryForwardDays" type="number" class="input-field" min="0" />
+        </div>
+      </div>
+
+      <div class="flex items-center gap-6">
+        <label class="flex items-center gap-2 cursor-pointer text-sm">
+          <input type="checkbox" formControlName="requiresDocument"
+                 class="w-4 h-4 text-primary-600 border-gray-300 rounded" />
+          Requires Document
+        </label>
+        <label class="flex items-center gap-2 cursor-pointer text-sm">
+          <input type="checkbox" formControlName="isAutoApprove"
+                 class="w-4 h-4 text-primary-600 border-gray-300 rounded" />
+          Auto Approve
+        </label>
+        <label class="flex items-center gap-2 cursor-pointer text-sm">
+          <input type="checkbox" formControlName="isActive"
+                 class="w-4 h-4 text-primary-600 border-gray-300 rounded" />
+          Active
+        </label>
+      </div>
+
+      <div class="flex gap-3 pt-2">
+        <button type="submit" class="btn-primary" [disabled]="formLoading">
+          {{ editingId ? 'Update' : 'Create' }}
+        </button>
+        <button type="button" (click)="closeForm()" class="btn-secondary">Cancel</button>
+      </div>
+
+    </form>
+  </div>
+
+  <!-- ─── Leave Types Table ──────────────────────── -->
+  <div *ngIf="!loading && leaveTypes.length > 0" class="card overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead class="bg-gray-50 border-b border-gray-200">
+          <tr>
+            <th class="text-left px-4 py-3 font-semibold text-gray-600">Name</th>
+            <th class="text-left px-4 py-3 font-semibold text-gray-600">Code</th>
+            <th class="text-center px-4 py-3 font-semibold text-gray-600">Quota/Year</th>
+            <th class="text-center px-4 py-3 font-semibold text-gray-600">Carry Fwd</th>
+            <th class="text-center px-4 py-3 font-semibold text-gray-600">Flags</th>
+            <th class="text-center px-4 py-3 font-semibold text-gray-600">Status</th>
+            <th class="text-right px-4 py-3 font-semibold text-gray-600">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let type of leaveTypes"
+              class="border-b border-gray-100 hover:bg-gray-50 transition-colors"
+              [ngClass]="{ 'opacity-50': !type.isActive }">
+            <td class="px-4 py-3 font-medium text-gray-800">{{ type.name }}</td>
+            <td class="px-4 py-3 text-gray-600">{{ type.code }}</td>
+            <td class="px-4 py-3 text-center">{{ type.defaultAnnualQuota }}</td>
+            <td class="px-4 py-3 text-center">{{ type.maxCarryForwardDays }}</td>
+            <td class="px-4 py-3 text-center text-xs space-x-1">
+              <span *ngIf="type.requiresDocument" class="badge badge-info">📎 Doc</span>
+              <span *ngIf="type.isAutoApprove" class="badge badge-success">⚡ Auto</span>
+            </td>
+            <td class="px-4 py-3 text-center">
+              <span class="badge" [ngClass]="type.isActive ? 'badge-success' : 'badge-gray'">
+                {{ type.isActive ? 'Active' : 'Inactive' }}
+              </span>
+            </td>
+            <td class="px-4 py-3 text-right space-x-2">
+              <button (click)="openEditForm(type)" class="btn-secondary btn-sm text-xs">Edit</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>

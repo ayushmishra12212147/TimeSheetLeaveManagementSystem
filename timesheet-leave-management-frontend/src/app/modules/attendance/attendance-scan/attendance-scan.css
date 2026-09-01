@@ -1,0 +1,4 @@
+/* QR reader container sizing */
+#qr-reader-element {
+  min-height: 280px;
+}

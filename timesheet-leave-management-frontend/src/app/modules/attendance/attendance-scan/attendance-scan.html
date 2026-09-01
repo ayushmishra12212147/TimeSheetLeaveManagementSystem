@@ -1,0 +1,52 @@
+<div class="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
+  <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden">
+
+    <!-- Header -->
+    <div class="flex items-center justify-between px-5 py-4 border-b border-gray-200">
+      <div>
+        <h3 class="font-semibold text-gray-800">
+          {{ scanType === 'clock-in' ? '🟢 Clock In' : '🔴 Clock Out' }}
+        </h3>
+        <p class="text-xs text-gray-500 mt-0.5">Point camera at the QR code</p>
+      </div>
+      <button (click)="onClose()" class="text-gray-400 hover:text-gray-600 text-xl leading-none">✕</button>
+    </div>
+
+    <!-- Scanner Area -->
+    <div class="p-5">
+
+      <!-- Success -->
+      <div *ngIf="successMessage" class="text-center py-8">
+        <div class="text-5xl mb-3">✅</div>
+        <p class="font-semibold text-green-700">{{ successMessage }}</p>
+      </div>
+
+      <!-- Error -->
+      <div *ngIf="errorMessage && !successMessage" class="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+        ⚠️ {{ errorMessage }}
+        <button (click)="startScanner()" class="block mt-2 text-xs text-red-600 underline">Try again</button>
+      </div>
+
+      <!-- Processing -->
+      <div *ngIf="processing" class="text-center py-8">
+        <div class="w-10 h-10 border-4 border-primary-200 border-t-primary-600 rounded-full animate-spin mx-auto mb-3"></div>
+        <p class="text-sm text-gray-600">Processing scan...</p>
+      </div>
+
+      <!-- QR Reader -->
+      <div *ngIf="!successMessage && !processing">
+        <div id="qr-reader-element" class="w-full rounded-lg overflow-hidden bg-gray-900" style="min-height: 400px;"></div>
+        <p *ngIf="scanning" class="text-center text-xs text-gray-500 mt-3">
+          Scanning... align QR code within the frame
+        </p>
+      </div>
+
+    </div>
+
+    <!-- Footer -->
+    <div class="px-5 pb-5">
+      <button (click)="onClose()" class="btn-secondary w-full">Cancel</button>
+    </div>
+
+  </div>
+</div>

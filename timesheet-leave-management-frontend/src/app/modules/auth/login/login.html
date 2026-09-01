@@ -1,0 +1,129 @@
+<div class="min-h-screen grid md:grid-cols-2">
+
+  <!-- Left Branding Panel -->
+  <div class="hidden md:flex bg-primary-900 text-white items-center justify-center p-16">
+    <div class="max-w-lg">
+
+      <h1 class="text-5xl font-bold mb-6 leading-tight">
+        TSLMS<span class="text-primary-300">.</span>
+      </h1>
+
+      <p class="text-lg text-primary-200 mb-10 leading-relaxed">
+        Timesheet & Leave Management System — QR Attendance,
+        Leave Workflows, and Employee Self-Service Portal.
+      </p>
+
+      <div class="space-y-4 text-base text-primary-100">
+        <div class="flex items-center gap-3">
+          <span class="w-8 h-8 bg-primary-700 rounded-lg flex items-center justify-center text-sm">✓</span>
+          <span>QR-Based Attendance Tracking</span>
+        </div>
+        <div class="flex items-center gap-3">
+          <span class="w-8 h-8 bg-primary-700 rounded-lg flex items-center justify-center text-sm">✓</span>
+          <span>Leave Approval Workflow</span>
+        </div>
+        <div class="flex items-center gap-3">
+          <span class="w-8 h-8 bg-primary-700 rounded-lg flex items-center justify-center text-sm">✓</span>
+          <span>Weekly Timesheet Tracking</span>
+        </div>
+        <div class="flex items-center gap-3">
+          <span class="w-8 h-8 bg-primary-700 rounded-lg flex items-center justify-center text-sm">✓</span>
+          <span>Reports & Analytics</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- Login Form Panel -->
+  <div class="flex items-center justify-center bg-gray-50 p-8">
+    <div class="w-full max-w-md">
+
+      <div class="card p-8">
+
+        <div class="text-center mb-8">
+          <div class="w-14 h-14 bg-primary-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+            <span class="text-2xl">🔐</span>
+          </div>
+          <h2 class="text-2xl font-bold text-gray-900">Welcome Back</h2>
+          <p class="text-gray-500 mt-1 text-sm">Sign in with your Employee ID</p>
+        </div>
+
+        <!-- Error Alert -->
+        <div *ngIf="errorMessage"
+             class="mb-6 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm flex items-center gap-2">
+          <span>⚠️</span>
+          <span>{{ errorMessage }}</span>
+        </div>
+
+        <form (ngSubmit)="login()" class="space-y-5">
+
+          <!-- Employee ID -->
+          <div>
+            <label for="employeeId" class="label">Employee ID</label>
+            <input
+              id="employeeId"
+              [(ngModel)]="employeeId"
+              name="employeeId"
+              type="text"
+              placeholder="e.g. EMP001"
+              class="input-field"
+              [disabled]="loading"
+              autocomplete="username"
+            />
+          </div>
+
+          <!-- Password -->
+          <div>
+            <label for="password" class="label">Password</label>
+            <div class="relative">
+              <input
+                id="password"
+                [(ngModel)]="password"
+                name="password"
+                [type]="showPassword ? 'text' : 'password'"
+                placeholder="Enter your password"
+                class="input-field pr-12"
+                [disabled]="loading"
+                autocomplete="current-password"
+              />
+              <button
+                type="button"
+                (click)="togglePassword()"
+                class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 text-lg"
+              >
+                {{ showPassword ? '🙈' : '👁' }}
+              </button>
+            </div>
+          </div>
+
+          <!-- Submit -->
+          <button
+            type="submit"
+            class="btn-primary w-full py-3"
+            [disabled]="loading"
+          >
+            <span *ngIf="!loading">Sign In</span>
+            <span *ngIf="loading" class="flex items-center justify-center gap-2">
+              <span class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+              Signing in...
+            </span>
+          </button>
+
+        </form>
+
+        <!-- Forgot Password Link -->
+        <div class="mt-6 text-center">
+          <a routerLink="/forgot-password"
+             class="text-sm text-primary-600 hover:text-primary-700 font-medium">
+            Forgot your password?
+          </a>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+</div>

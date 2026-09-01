@@ -1,0 +1,46 @@
+<aside class="h-full bg-primary-950 text-white flex flex-col transition-all duration-300"
+       [class.w-64]="!collapsed"
+       [class.w-16]="collapsed">
+
+  <!-- Logo -->
+  <div class="h-16 flex items-center border-b border-primary-800 px-4">
+    <div *ngIf="!collapsed" class="text-xl font-bold tracking-tight">
+      Work<span class="text-primary-300">Track</span>
+    </div>
+    <div *ngIf="collapsed" class="text-xl font-bold mx-auto">W</div>
+  </div>
+
+  <!-- Nav Sections -->
+  <nav class="flex-1 overflow-y-auto py-4">
+    <div *ngFor="let section of sections" class="mb-4">
+
+      <div *ngIf="!collapsed"
+           class="px-4 mb-2 text-[10px] uppercase tracking-widest text-primary-400 font-semibold">
+        {{ section.name }}
+      </div>
+
+      <a *ngFor="let item of section.items"
+         [routerLink]="item.route"
+         routerLinkActive="bg-primary-800 text-white"
+         [routerLinkActiveOptions]="{ exact: item.route === '/dashboard' }"
+         class="flex items-center gap-3 px-4 py-2.5 mx-2 rounded-lg text-primary-200
+                hover:bg-primary-800 hover:text-white transition-colors duration-150 text-sm"
+         [title]="item.label">
+        <span class="text-base flex-shrink-0">{{ item.icon }}</span>
+        <span *ngIf="!collapsed">{{ item.label }}</span>
+      </a>
+
+    </div>
+  </nav>
+
+  <!-- Logout -->
+  <div class="border-t border-primary-800 p-3">
+    <button (click)="logout()"
+            class="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-primary-300
+                   hover:bg-red-900/40 hover:text-red-300 transition-colors duration-150 text-sm">
+      <span class="text-base">🚪</span>
+      <span *ngIf="!collapsed">Logout</span>
+    </button>
+  </div>
+
+</aside>
