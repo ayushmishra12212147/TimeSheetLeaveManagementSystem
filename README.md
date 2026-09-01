@@ -1,1 +1,1 @@
-# NewRepo
+Trainning Project
